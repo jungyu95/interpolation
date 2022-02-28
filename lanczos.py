@@ -1,5 +1,5 @@
 #Lanczos interpolation 
-from cgi import test
+from cv2 import resize
 import numpy as np
 import math
 import matplotlib.pyplot as plt
@@ -25,7 +25,7 @@ def interpolation(x,points_value,order):
     
     for i in range(x_floor-order+1, x_floor+order):
         try:
-            interpolation_value += points_value[0,i-1]*kernel(x-i,order)
+            interpolation_value += points_value[0,i]*kernel(x-i,order)
         except:
             interpolation_value += 0
     return interpolation_value
@@ -56,7 +56,7 @@ def lanczos(data,resize,order):
     print(resize_data)
     interpolation_data=np.zeros([1,resize])
     for i in range(resize):
-        interpolation_data[0,i-1] = np.uint8(interpolation(i,resize_data,order))
+        interpolation_data[0,i] = np.uint8(interpolation((data.size/resize)*i,data,order))
     return interpolation_data
 
          
@@ -69,7 +69,8 @@ test_points = np.array([[1,2,3,4,5,6,7,8]])
 new_points = np.array([[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]])
 test_value = np.array([[240, 12, 120, 40, 80,70,100,255]])
 new_value = lanczos(test_value,16,4)
+test_value = data_resize(test_value,16)
 print(new_value)
-plt.scatter(test_points,test_value)
-plt.scatter(new_points,new_value,10,'r')
+plt.scatter(new_points,test_value,20,'b')
+plt.scatter(new_points,new_value,20,'r')
 plt.show()
